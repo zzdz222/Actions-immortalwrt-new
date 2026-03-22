@@ -24,8 +24,8 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-24.10
   CONFIG_FILE: configs/ipq40xx.txt
-  CONFIG_PACKAGES: configs/packages-L.txt
-  CONFIG_5G: configs/packages-5G.txt
+  CONFIG_PACKAGES: configs/ipq40xx-packages-L.txt
+  CONFIG_5G: configs/ipq40xx-packages-5G.txt
   FREE_DISK_SH: scripts/free_disk_space.sh
   ENV_SH: scripts/environment.sh
   SETTINGS_SH: scripts/init-settings.sh
