@@ -1,3 +1,4 @@
+
 #
 # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
 #
@@ -17,8 +18,8 @@ on:
   repository_dispatch:
   workflow_dispatch:
   schedule:
-   - cron: 0 20 * * 2
-        # 分,时,日,月,周。每周 三 20时执行一次 (UTC时间)
+   - cron: 0 20 * * 4
+   #      分,时,日,月,周。每周五 20时执行一次 (UTC时间)
   
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -28,12 +29,12 @@ env:
   REPO_BRANCH: openwrt-24.10
   # 修改 REPO_BRANCH 来达到更改编译版本
   PLATFORM_FILE: configs/ipq40xx.txt
-  CONFIG_FILE: configs/Packages-L.txt
+  CONFIG_FILE: configs/Packages.txt
   CONFIG_5G: configs/Packages-5G.txt
   SETTINGS_SH: scripts/init-settings.sh
   PACKAGES_SH: scripts/packages.sh
   INSTALL5G_SH: scripts/install-5G.sh
-  CLASH_CORE_SH: scripts/preset-clash-core-arm64-L.sh
+  CLASH_CORE_SH: scripts/preset-clash-core-amd64.sh
   RUST_SH: scripts/rust.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
@@ -117,8 +118,8 @@ jobs:
       id: check-cache
       uses: actions/cache@main
       with:
-        key: ipq40xx-${{env.REPO_BRANCH}}-${{env.WRT_HASH}}
-        restore-keys: ipq40xx-${{env.REPO_BRANCH}}
+        key: ipq40xx.txt-${{env.REPO_BRANCH}}-${{env.WRT_HASH}}
+        restore-keys: ipq40xx.txt-${{env.REPO_BRANCH}}
         path: |
           ./openwrt/.ccache
           ./openwrt/staging_dir/host*
@@ -144,7 +145,7 @@ jobs:
         fi
 
         if ${{steps.check-cache.outputs.cache-hit != 'true'}}; then
-          CACHE_LIST=$(gh cache list --key "rockchip-$REPO_BRANCH" | cut -f 1)
+          CACHE_LIST=$(gh cache list --key "ipq40xx.txt-$REPO_BRANCH" | cut -f 1)
           for CACHE_KEY in $CACHE_LIST; do
             gh cache delete $CACHE_KEY
           done
@@ -215,16 +216,6 @@ jobs:
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
-
-    - name: 固件重命名
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      shell: bash
-      run: |
-        cd openwrt/bin/targets/*/*
-        for file in *ipq40xx*.gz; do
-          new_name=$(echo "$file" | sed 's/ipq40xx-//')
-          mv -v "$file" "$new_name"
-        done
 
     - name: 上传固件目录
       uses: actions/upload-artifact@main
