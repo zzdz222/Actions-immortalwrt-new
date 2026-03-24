@@ -34,7 +34,7 @@ env:
   SETTINGS_SH: scripts/init-settings.sh
   PACKAGES_SH: scripts/packages.sh
   INSTALL5G_SH: scripts/install-5G.sh
-  CLASH_CORE_SH: scripts/preset-clash-core-amd64.sh
+  # CLASH_CORE_SH: scripts/preset-clash-core-amd64.sh
   RUST_SH: scripts/rust.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: false
@@ -170,7 +170,7 @@ jobs:
         chmod +x $GITHUB_WORKSPACE/$SETTINGS_SH && $GITHUB_WORKSPACE/$SETTINGS_SH
         chmod +x $GITHUB_WORKSPACE/$PACKAGES_SH && $GITHUB_WORKSPACE/$PACKAGES_SH
         chmod +x $GITHUB_WORKSPACE/$INSTALL5G_SH && $GITHUB_WORKSPACE/$INSTALL5G_SH
-        chmod +x $GITHUB_WORKSPACE/$CLASH_CORE_SH && $GITHUB_WORKSPACE/$CLASH_CORE_SH
+        # chmod +x $GITHUB_WORKSPACE/$CLASH_CORE_SH && $GITHUB_WORKSPACE/$CLASH_CORE_SH
 
     - name: 下载文件
       run: |
